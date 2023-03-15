@@ -2,6 +2,7 @@ package com.HrSystem.controller;
 
 
 import com.HrSystem.common.pojo.Result;
+import com.HrSystem.entity.SignInInf;
 import com.HrSystem.entity.Train;
 import com.HrSystem.service.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author hrq
@@ -40,4 +42,17 @@ public class TrainController {
         }
         return Result.ok(trainsByDate);
     }
+
+    @RequestMapping("/trainsignin")
+    public Result trainSignIn(@RequestBody SignInInf signInInf){
+        trainService.TrainSingIn(signInInf);
+        return Result.ok("签到成功！");
+    }
+
+    @GetMapping("/getSignInf")
+    public Result getTrainInf(Integer trainId){
+        Set<SignInInf> trainUsers = trainService.findTrainUsers(trainId);
+        return Result.ok(trainUsers);
+    }
+
 }
