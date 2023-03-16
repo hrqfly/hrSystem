@@ -6,6 +6,7 @@ import com.HrSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,12 @@ public class UserController {
     }
 
     @RequestMapping("login")
-    public Result login(@RequestBody User user){
+    public Result login(@RequestBody User user, HttpServletResponse response){
+        //尝试增加cookie
+//        Cookie cookie =  new Cookie("ticket","loginticket");
+//        cookie.setPath("http://localhost:8080/login");
+//        cookie.setMaxAge((int) (System.currentTimeMillis()+1000*60*30));
+//        response.addCookie(cookie);
         User userById = userService.findUserById(user.getId());
         if (userById==null){
             return Result.error("nullUser");
@@ -53,5 +59,11 @@ public class UserController {
             id = u.getId();
         }
         return Result.ok(id.toString());
+    }
+
+    @RequestMapping("/updateuser")
+    public Result updateUser(@RequestBody User user){
+        userService.updateUser(user);
+        return Result.ok("编辑成功！");
     }
 }

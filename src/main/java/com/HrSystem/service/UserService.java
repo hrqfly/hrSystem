@@ -30,4 +30,8 @@ public class UserService {
         userMapper.insert(user);
     }
 
+    public void updateUser(User user){
+        userMapper.updateById(user);
+    }
+
 }
