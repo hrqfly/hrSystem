@@ -6,6 +6,7 @@ import com.HrSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -23,17 +24,16 @@ public class UserController {
 
     @RequestMapping("login")
     public Result login(@RequestBody User user, HttpServletResponse response){
-        //尝试增加cookie
-//        Cookie cookie =  new Cookie("ticket","loginticket");
-//        cookie.setPath("http://localhost:8080/login");
-//        cookie.setMaxAge((int) (System.currentTimeMillis()+1000*60*30));
-//        response.addCookie(cookie);
         User userById = userService.findUserById(user.getId());
         if (userById==null){
             return Result.error("nullUser");
         }
         String password1 = userById.getPassword();
         if (password1.equals(user.getPassword())){
+            //尝试增加cookie
+            Cookie cookie = new Cookie("user",userById.getId()+"#"+userById.getName());
+            cookie.setMaxAge(3600*1);
+            response.addCookie(cookie);
             return Result.ok();
         }
         return Result.error("password Wrong");

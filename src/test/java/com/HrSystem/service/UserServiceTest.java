@@ -23,4 +23,11 @@ public class UserServiceTest {
         user.setName("Mr.moose");
         userService.updateUser(user);
     }
+
+    @Test
+    public void testSelectById(){
+        User user = userService.findUserById(1);
+        System.out.println(user);
+    }
+
 }
