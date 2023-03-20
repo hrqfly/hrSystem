@@ -24,4 +24,5 @@ public class Contract {
     private String phoneNum;
     private String email;
     private String dateEntry;
+    private String dateSign;
 }

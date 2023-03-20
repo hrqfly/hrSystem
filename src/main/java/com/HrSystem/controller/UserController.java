@@ -17,12 +17,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/find")
-    public User findUser(){
-        return userService.findUserById(2);
+    @GetMapping("/findbyid")
+    public Result findUser(Integer userId){
+        User user = userService.findUserById(userId);
+        return Result.ok(user);
     }
 
-    @RequestMapping("login")
+    @RequestMapping("/login")
     public Result login(@RequestBody User user, HttpServletResponse response){
         User userById = userService.findUserById(user.getId());
         if (userById==null){
@@ -37,6 +38,15 @@ public class UserController {
             return Result.ok();
         }
         return Result.error("password Wrong");
+    }
+
+    @RequestMapping("/logout")
+    public Result logout(HttpServletResponse response){
+        // 删除cookie
+        Cookie cookie = new Cookie("user","");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return Result.ok("退出登录成功");
     }
 
     @GetMapping("/searchuser")

@@ -4,10 +4,7 @@ import com.HrSystem.common.pojo.Result;
 import com.HrSystem.entity.Contract;
 import com.HrSystem.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,8 +20,8 @@ public class ContractController {
     @Autowired
     private ContractService contractService;
 
-    @RequestMapping("/findcontract")
-    public Result findContractByUserName(@RequestBody String userName){
+    @GetMapping("/findcontract")
+    public Result findContractByUserName(String userName){
         List<Contract> contracts = contractService.findContractByUserName(userName);
         if (contracts.isEmpty()){
             return Result.error("未查到相关合同信息");
