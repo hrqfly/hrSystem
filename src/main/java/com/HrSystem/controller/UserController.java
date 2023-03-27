@@ -2,11 +2,13 @@ package com.HrSystem.controller;
 
 import com.HrSystem.common.pojo.Result;
 import com.HrSystem.entity.User;
+import com.HrSystem.service.TokenService;
 import com.HrSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -16,6 +18,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private TokenService tokenService;
 
     @GetMapping("/findbyid")
     public Result findUser(Integer userId){
@@ -31,11 +36,13 @@ public class UserController {
         }
         String password1 = userById.getPassword();
         if (password1.equals(user.getPassword())){
+            // 生成token
+            String token = tokenService.getToken(userById);
             //尝试增加cookie
             Cookie cookie = new Cookie("user",userById.getId()+"#"+userById.getName());
             cookie.setMaxAge(3600*1);
             response.addCookie(cookie);
-            return Result.ok();
+            return Result.ok(token);
         }
         return Result.error("password Wrong");
     }
@@ -75,5 +82,11 @@ public class UserController {
     public Result updateUser(@RequestBody User user){
         userService.updateUser(user);
         return Result.ok("编辑成功！");
+    }
+
+    @GetMapping("checktoken")
+    public Boolean checkToken(HttpServletRequest request){
+        String token = request.getHeader("token");
+        return tokenService.checkToken(token);
     }
 }
