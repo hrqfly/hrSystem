@@ -39,4 +39,22 @@ public class RecruitmentPlanController {
         return Result.ok("招聘计划发布成功");
     }
 
+    @GetMapping("/findUnApprovalPlan")
+    public Result findUnApprovalPlan(Integer approverId){
+        List<RecruitmentPlan> planByApproverId = recruitmentPlanService.findPlanByApproverId(approverId);
+        if (planByApproverId.isEmpty()){
+            return Result.ok("没有待审批的招聘计划");
+        }
+        return Result.ok(planByApproverId);
+    }
+
+    @RequestMapping("/approvalPlan")
+    public Result approvalPlan(@RequestBody RecruitmentPlan recruitmentPlan){
+        int i = recruitmentPlanService.approvePlan(recruitmentPlan);
+        if (i==1) {
+            return Result.ok();
+        }else {
+            return Result.error("审批有误");
+        }
+    }
 }

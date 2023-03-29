@@ -13,4 +13,6 @@ public class RecruitmentPlan {
     private String age;
     private String requirements;
     private String wages;
+    private Integer approverId;
+    private Integer status;
 }

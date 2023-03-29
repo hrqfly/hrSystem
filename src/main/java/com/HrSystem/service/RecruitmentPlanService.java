@@ -15,12 +15,27 @@ public class RecruitmentPlanService {
     private RecruitmentPlanMapper recruitmentPlanMapper;
     
     public int insertPlan(RecruitmentPlan recruitmentPlan){
+        recruitmentPlan.setStatus(0);
         return recruitmentPlanMapper.insert(recruitmentPlan);
+    }
+
+    public int approvePlan(RecruitmentPlan recruitmentPlan){
+        recruitmentPlan.setStatus(1);
+        return recruitmentPlanMapper.updateById(recruitmentPlan);
     }
 
     public List<RecruitmentPlan> findPlanByPost(String post){
         HashMap<String,Object> map = new HashMap<String,Object>();
         map.put("post",post);
+        map.put("status","1");
+        List<RecruitmentPlan> recruitmentPlans = recruitmentPlanMapper.selectByMap(map);
+        return recruitmentPlans;
+    }
+
+    public List<RecruitmentPlan> findPlanByApproverId(Integer approverId){
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("approver_id",approverId);
+        map.put("status","0");
         List<RecruitmentPlan> recruitmentPlans = recruitmentPlanMapper.selectByMap(map);
         return recruitmentPlans;
     }

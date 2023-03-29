@@ -55,4 +55,10 @@ public class TrainController {
         return Result.ok(trainUsers);
     }
 
+    @GetMapping("/getUserTrainInf")
+    public Result getUserSignInTrains(Integer userId){
+        Set<Train> userSignInTrains = trainService.findUserSignInTrains(userId);
+        return Result.ok(userSignInTrains);
+    }
+
 }
