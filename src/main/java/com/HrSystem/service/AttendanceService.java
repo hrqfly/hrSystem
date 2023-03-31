@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author  hrq
@@ -53,5 +54,14 @@ public class AttendanceService {
         }else {
             return 0;
         }
+    }
+
+    public List<Attendance> findAttendanceByDate(Date start,Date end,Integer userId){
+        QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ge("sign_in_date",start);
+        queryWrapper.le("sign_in_date",end);
+        queryWrapper.eq("user_id",userId);
+        List<Attendance> attendances = attendanceMapper.selectList(queryWrapper);
+        return attendances;
     }
 }

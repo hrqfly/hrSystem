@@ -1,11 +1,13 @@
 package com.HrSystem.controller;
 
 import com.HrSystem.common.pojo.Result;
+import com.HrSystem.entity.Attendance;
+import com.HrSystem.entity.QueryAttendanceModel;
 import com.HrSystem.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author  hrq
@@ -18,7 +20,7 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
-    @RequestMapping("/signStart")
+    @GetMapping("/signStart")
     public Result signStart(Integer userId){
         int insertNum = attendanceService.insertAttendance(userId);
         if (insertNum==0){
@@ -27,7 +29,7 @@ public class AttendanceController {
         return Result.ok("上班打卡成功，祝您工作愉快");
     }
 
-    @RequestMapping("/signEnd")
+    @GetMapping("/signEnd")
     public Result signEnd(Integer userId){
         int addEndDateNum = attendanceService.addEndDate(userId);
         if (addEndDateNum==0){
@@ -35,4 +37,14 @@ public class AttendanceController {
         }
         return Result.ok("下班打卡成功，感谢您一天的勤劳工作，再见");
     }
+
+    @RequestMapping("/findAttendanceByDate")
+    public Result findAttendanceByDate(@RequestBody QueryAttendanceModel model){
+        List<Attendance> attendanceByDate = attendanceService.findAttendanceByDate(model.getStart(), model.getEnd(),model.getUserId());
+        if (attendanceByDate.isEmpty()){
+            Result.ok("未查到签到数据");
+        }
+        return Result.ok(attendanceByDate);
+    }
+
 }

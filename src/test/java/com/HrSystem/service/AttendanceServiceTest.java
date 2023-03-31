@@ -17,13 +17,13 @@ public class AttendanceServiceTest {
 
     @Test
     public void testInsertAttendance(){
-        int i = attendanceService.insertAttendance(2);
+        int i = attendanceService.insertAttendance(3);
         System.out.println(i);
     }
 
     @Test
     public void testAddEndDate(){
-        int i = attendanceService.addEndDate(2);
+        int i = attendanceService.addEndDate(1);
         System.out.println(i);
     }
 }
