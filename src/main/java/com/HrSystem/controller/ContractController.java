@@ -36,9 +36,9 @@ public class ContractController {
     public Result addContract(Contract contract){
         int i = contractService.addContract(contract);
         if (i == 1){
-             return Result.ok("插入合同数据成功");
+             return Result.ok("录入合同数据成功");
         }
-        return Result.error("合同数据插入失败");
+        return Result.error("录入合同数据失败");
     }
 
 }
