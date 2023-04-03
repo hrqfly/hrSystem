@@ -28,4 +28,9 @@ public class ContractService {
         List<Contract> contracts = contractMapper.selectByMap(queryMap);
         return contracts;
     }
+
+    public int addContract(Contract contract){
+        int insertNum = contractMapper.insert(contract);
+        return insertNum;
+    }
 }
