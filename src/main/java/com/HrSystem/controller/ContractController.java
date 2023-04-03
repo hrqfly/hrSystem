@@ -4,10 +4,7 @@ import com.HrSystem.common.pojo.Result;
 import com.HrSystem.entity.Contract;
 import com.HrSystem.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,7 +30,7 @@ public class ContractController {
     }
 
     @RequestMapping("/addContract")
-    public Result addContract(Contract contract){
+    public Result addContract(@RequestBody Contract contract){
         int i = contractService.addContract(contract);
         if (i == 1){
              return Result.ok("录入合同数据成功");
