@@ -23,6 +23,7 @@ public class TokenService {
     private static long time = 1000l*60*60;
 
     private static String signature = "signature";
+    private static String superSignature = "signature";
 
     public String getToken(User user){
         Map<String,Object> claim = new HashMap<>();
@@ -44,12 +45,45 @@ public class TokenService {
         return token;
     }
 
+    public String getSuperToken(User user){
+        Map<String,Object> claim = new HashMap<>();
+        claim.put("username", user.getName());
+        claim.put("id", user.getId());
+        JwtBuilder jwtBuilder = Jwts.builder();
+        String token = jwtBuilder
+                //header
+                .setHeaderParam("typ", "JWT")
+                .setHeaderParam("alg", "HS256")
+                //payload
+                .setClaims(claim)
+                .setSubject("token")
+                .setExpiration(new Date(System.currentTimeMillis() + time))
+                .setId(UUID.randomUUID().toString())
+                //signature
+                .signWith(SignatureAlgorithm.HS256, superSignature)
+                .compact();
+        return token;
+    }
+
     public boolean checkToken(String token){
         if (token==null){
             return false;
         }
         try {
-            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(signature).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(signature).parseClaimsJws(token);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkSuperToken(String token){
+        if (token==null){
+            return false;
+        }
+        try {
+            Jwts.parser().setSigningKey(superSignature).parseClaimsJws(token);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

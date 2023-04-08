@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -30,6 +31,7 @@ public class UserController {
 
     @RequestMapping("/login")
     public Result login(@RequestBody User user, HttpServletResponse response){
+        HashMap<String,String> map = new HashMap<>();
         User userById = userService.findUserById(user.getId());
         if (userById==null){
             return Result.error("nullUser");
@@ -38,11 +40,17 @@ public class UserController {
         if (password1.equals(user.getPassword())){
             // 生成token
             String token = tokenService.getToken(userById);
+            map.put("token",token);
+            //增加管理员设置
+            if (userById.getType()==1){
+                String superToken = tokenService.getSuperToken(userById);
+                map.put("superToken",superToken);
+            }
             //尝试增加cookie
             Cookie cookie = new Cookie("user",userById.getId()+"#"+userById.getName());
             cookie.setMaxAge(3600*1);
             response.addCookie(cookie);
-            return Result.ok(token);
+            return Result.ok(map);
         }
         return Result.error("password Wrong");
     }
@@ -84,9 +92,15 @@ public class UserController {
         return Result.ok("编辑成功！");
     }
 
-    @GetMapping("checktoken")
+    @GetMapping("/checktoken")
     public Boolean checkToken(HttpServletRequest request){
         String token = request.getHeader("token");
+        return tokenService.checkToken(token);
+    }
+
+    @GetMapping("/checksupertoken")
+    public Boolean checkSuperToken(HttpServletRequest request){
+        String token = request.getHeader("superToken");
         return tokenService.checkToken(token);
     }
 }
