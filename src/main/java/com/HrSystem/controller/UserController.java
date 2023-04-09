@@ -101,6 +101,6 @@ public class UserController {
     @GetMapping("/checksupertoken")
     public Boolean checkSuperToken(HttpServletRequest request){
         String token = request.getHeader("superToken");
-        return tokenService.checkToken(token);
+        return tokenService.checkSuperToken(token);
     }
 }

@@ -3,6 +3,8 @@ package com.HrSystem.service;
 import io.jsonwebtoken.*;
 import com.HrSystem.entity.User;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,12 +27,14 @@ public class TokenService {
     private static String signature = "signature";
     private static String superSignature = "signature";
 
+    private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
+
     public String getToken(User user){
         Map<String,Object> claim = new HashMap<>();
         claim.put("username", user.getName());
         claim.put("id", user.getId());
         JwtBuilder jwtBuilder = Jwts.builder();
-        String token = jwtBuilder
+        return jwtBuilder
                 //header
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
@@ -42,7 +46,6 @@ public class TokenService {
                 //signature
                 .signWith(SignatureAlgorithm.HS256, signature)
                 .compact();
-        return token;
     }
 
     public String getSuperToken(User user){
@@ -72,7 +75,7 @@ public class TokenService {
         try {
             Jwts.parser().setSigningKey(signature).parseClaimsJws(token);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
             return false;
         }
         return true;
@@ -85,6 +88,7 @@ public class TokenService {
         try {
             Jwts.parser().setSigningKey(superSignature).parseClaimsJws(token);
         } catch (Exception e) {
+            logger.debug(e.getMessage());
             e.printStackTrace();
             return false;
         }

@@ -3,6 +3,8 @@ package com.HrSystem.service;
 import com.HrSystem.entity.Attendance;
 import com.HrSystem.mapper.AttendanceMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,12 @@ public class AttendanceService {
     @Autowired
     private AttendanceMapper attendanceMapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(AttendanceService.class);
+
     public int insertAttendance(Integer userId){
+
+        logger.info("insertAttendance running...");
+
         Attendance attendance = new Attendance();
         attendance.setUserId(userId);
         Date signInDate = new Date();
@@ -34,6 +41,8 @@ public class AttendanceService {
     }
 
     public int addEndDate(Integer userId){
+
+        logger.info("addEndDate running...");
 
         Date date = new Date(System.currentTimeMillis()-1000*60*60*24);
         QueryWrapper<Attendance> queryWrapper = new QueryWrapper<>();
