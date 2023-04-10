@@ -32,4 +32,13 @@ public class SalaryController {
         return Result.ok(salaryByUserId);
     }
 
+    @GetMapping("/generateSalary")
+    public Result generateSalaryByAttendance(Integer userId,Float rate){
+        int generateNum = salaryService.generateSalaryByAttendance(userId, rate);
+        if (generateNum==0){
+            return Result.error("生成薪资记录失败！");
+        }
+        return Result.ok("审核完成，已按照审核结果生成薪资信息");
+    }
+
 }

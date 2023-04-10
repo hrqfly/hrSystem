@@ -47,4 +47,10 @@ public class AttendanceController {
         return Result.ok(attendanceByDate);
     }
 
+    @RequestMapping("/getWorkDayNum")
+    public Result getWorkDayNum(@RequestBody QueryAttendanceModel model){
+        Integer workDayNum = attendanceService.getWorkDayNum(model.getStart(), model.getEnd());
+        return Result.ok(workDayNum);
+    }
+
 }

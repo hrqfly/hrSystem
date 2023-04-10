@@ -33,4 +33,15 @@ public class ContractService {
         int insertNum = contractMapper.insert(contract);
         return insertNum;
     }
+
+    public Contract findContractByUserId(Integer userId){
+        HashMap<String,Object> queryMap = new HashMap<>();
+        queryMap.put("user_id",userId);
+        List<Contract> contracts = contractMapper.selectByMap(queryMap);
+        if (!contracts.isEmpty()){
+            return contracts.get(0);
+        }
+        // 没找到该员工的合同
+        return null;
+    }
 }

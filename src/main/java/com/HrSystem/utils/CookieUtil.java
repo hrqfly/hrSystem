@@ -1,5 +1,7 @@
 package com.HrSystem.utils;
 
+import org.springframework.stereotype.Component;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2023/03/17
  */
 
+@Component
 public class CookieUtil {
 
     public static String getValue(HttpServletRequest request, String name) {

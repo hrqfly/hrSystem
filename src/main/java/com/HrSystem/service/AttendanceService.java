@@ -2,6 +2,7 @@ package com.HrSystem.service;
 
 import com.HrSystem.entity.Attendance;
 import com.HrSystem.mapper.AttendanceMapper;
+import com.HrSystem.utils.GetWorkDayNumUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,5 +73,11 @@ public class AttendanceService {
         queryWrapper.eq("user_id",userId);
         List<Attendance> attendances = attendanceMapper.selectList(queryWrapper);
         return attendances;
+    }
+
+    public Integer getWorkDayNum(Date start,Date end){
+        GetWorkDayNumUtil getWorkDayNumUtil = new GetWorkDayNumUtil();
+        Integer workDayNum = getWorkDayNumUtil.getWorkDayNum(start, end);
+        return workDayNum;
     }
 }
