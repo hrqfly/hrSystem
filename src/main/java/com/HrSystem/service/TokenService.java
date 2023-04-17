@@ -30,6 +30,7 @@ public class TokenService {
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
 
     public String getToken(User user){
+        logger.info(user.getId()+":getToken");
         Map<String,Object> claim = new HashMap<>();
         claim.put("username", user.getName());
         claim.put("id", user.getId());
@@ -49,6 +50,7 @@ public class TokenService {
     }
 
     public String getSuperToken(User user){
+        logger.info(user.getId()+":getSuperToken");
         Map<String,Object> claim = new HashMap<>();
         claim.put("username", user.getName());
         claim.put("id", user.getId());

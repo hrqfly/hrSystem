@@ -21,4 +21,6 @@ public class User {
     private String email;
     private String salt;
     private Integer type;
+    private Integer leaderId;
+    private Integer underlingId;
 }
