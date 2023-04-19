@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -26,6 +27,12 @@ public class UserController {
     @GetMapping("/findbyid")
     public Result findUser(Integer userId){
         User user = userService.findUserById(userId);
+        return Result.ok(user);
+    }
+
+    @GetMapping("/findLeaderById")
+    public Result findLeader(Integer leaderId){
+        User user = userService.findUserById(leaderId);
         return Result.ok(user);
     }
 
@@ -102,5 +109,23 @@ public class UserController {
     public Boolean checkSuperToken(HttpServletRequest request){
         String token = request.getHeader("superToken");
         return tokenService.checkSuperToken(token);
+    }
+
+    @GetMapping("/getMyColleague")
+    public Result getMyColleague(Integer leaderId){
+        List<User> myColleagues = userService.findColleague(leaderId);
+        if (myColleagues==null){
+            return Result.error("你尚未有同组同事");
+        }
+        return Result.ok(myColleagues);
+    }
+
+    @GetMapping("/getOrgStructure")
+    public Result getOrgStructure(Integer userId){
+        Map<String, Object> orgStructure = userService.getOrgStructure(userId);
+        if (orgStructure.isEmpty()){
+            return Result.error("未查询到组织架构信息");
+        }
+        return Result.ok(orgStructure);
     }
 }

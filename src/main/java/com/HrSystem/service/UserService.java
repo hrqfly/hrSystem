@@ -5,8 +5,10 @@ import com.HrSystem.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -32,6 +34,31 @@ public class UserService {
 
     public void updateUser(User user){
         userMapper.updateById(user);
+    }
+
+    public List<User> findColleague(Integer leaderId){
+        HashMap<String, Object> queryMap = new HashMap<>();
+        queryMap.put("leader_id",leaderId);
+        List<User> colleagues = userMapper.selectByMap(queryMap);
+        if (!colleagues.isEmpty()){
+            return colleagues;
+        }
+        return null;
+    }
+
+    public Map<String, Object> getOrgStructure(Integer userId){
+        HashMap<String, Object> OrgStructureMap = new HashMap<>();
+        User user = userMapper.selectById(userId);
+        Integer leaderId = user.getLeaderId();
+        User leader = userMapper.selectById(leaderId);
+        List<User> leaders = new ArrayList<>();
+        leaders.add(leader);
+        OrgStructureMap.put("leader",leaders);
+        List<User> myColleagues = this.findColleague(leaderId);
+        OrgStructureMap.put("colleagues",myColleagues);
+        List<User> underlings = this.findColleague(userId);
+        OrgStructureMap.put("underlings",underlings);
+        return OrgStructureMap;
     }
 
 }
