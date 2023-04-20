@@ -31,19 +31,33 @@ public class EmployeePortraitsService {
 
     private static final Logger logger = LoggerFactory.getLogger(EmployeePortraitsService.class);
 
-    public void addEmployeePortraitsInf(EmployeePortraitsInf employeePortraitsInf){
+    public Long addEmployeePortraitsInf(EmployeePortraitsInf employeePortraitsInf){
         logger.info("run addEmployeePortraitsInf");
         String redisKey = redisKeyPrefix+employeePortraitsInf.getUserId()+employeePortraitsInf.getType();
         String[] content = employeePortraitsInf.getContent().split(",");
+        Long addNum = 0L;
         for (String s:content){
-            redisTemplate.opsForSet().add(redisKey,s);
+            addNum += redisTemplate.opsForSet().add(redisKey,s);
         }
+        return addNum;
     }
+
+
 
     public Set<String> getEmployeePortraitsInf(Integer userId,String type){
         logger.info("run getEmployeePortraitsInf");
         String redisKey = redisKeyPrefix+userId+type;
         Set<String> members = redisTemplate.opsForSet().members(redisKey);
         return members;
+    }
+
+    public Long deleteEmployeePortraitsInf(EmployeePortraitsInf employeePortraitsInf){
+        String redisKey = redisKeyPrefix+employeePortraitsInf.getUserId()+employeePortraitsInf.getType();
+        String[] split = employeePortraitsInf.getContent().split(",");
+        Long removeNum = 0L;
+        for (String s : split){
+            removeNum += redisTemplate.opsForSet().remove(redisKey, s);
+        }
+        return removeNum;
     }
 }
