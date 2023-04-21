@@ -2,14 +2,12 @@ package com.HrSystem.controller;
 
 import com.HrSystem.common.pojo.EmployeePortraitsInf;
 import com.HrSystem.common.pojo.Result;
+import com.HrSystem.entity.EmployeeRating;
 import com.HrSystem.service.EmployeePortraitsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -66,5 +64,40 @@ public class EmployeePortraitsController {
             }
         }
         return Result.ok(allEmployeePortraitsInf);
+    }
+
+    @RequestMapping("/addEmployeeRating")
+    public Result addEmployeeRating(@RequestBody EmployeeRating employeeRating){
+        Integer addNum = employeePortraitsService.InsertEmployeeRating(employeeRating);
+        if (addNum>0){
+            return Result.ok("评估数据添加成功");
+        }
+        return Result.error("评估数据添加失败，请重试");
+    }
+
+    @RequestMapping("/approvalEmployeeRating")
+    public Result approvalEmployeeRating(@RequestBody EmployeeRating employeeRating){
+        Integer updateNum = employeePortraitsService.updateEmployeeRating(employeeRating);
+        if (updateNum>0){
+            return Result.ok("评估数据审核通过");
+        }
+        return Result.error("评估数据审核更新失败，请重试");
+    }
+
+    @RequestMapping("/searchUnApprovalEmployeeRating")
+    public Result searchUnApprovalEmployeeRating(Integer userId){
+        EmployeeRating employeeRating = employeePortraitsService.selectUnApprovalEmployeeRating(userId);
+        if (employeeRating==null){
+            return Result.error("未找到待你审核的评估数据");
+        }
+        return Result.ok(employeeRating);
+    }
+    @GetMapping("/getApprovalEmployeeRating")
+    public Result getApprovalEmployeeRating(Integer userId){
+        EmployeeRating employeeRating = employeePortraitsService.getApprovalEmployeeRating(userId);
+        if (employeeRating==null){
+            return Result.error("没有取到该员工的评估数据");
+        }
+        return Result.ok(employeeRating);
     }
 }

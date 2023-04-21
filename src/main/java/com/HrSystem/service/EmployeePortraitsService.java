@@ -7,18 +7,26 @@ package com.HrSystem.service;
  */
 
 import com.HrSystem.common.pojo.EmployeePortraitsInf;
+import com.HrSystem.entity.EmployeeRating;
+import com.HrSystem.mapper.EmployeeRatingMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 @Service
 public class EmployeePortraitsService {
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private EmployeeRatingMapper employeeRatingMapper;
 
     public static String redisKeyPrefix = "portraits";
 
@@ -52,6 +60,7 @@ public class EmployeePortraitsService {
     }
 
     public Long deleteEmployeePortraitsInf(EmployeePortraitsInf employeePortraitsInf){
+        logger.info("run deleteEmployeePortraitsInf");
         String redisKey = redisKeyPrefix+employeePortraitsInf.getUserId()+employeePortraitsInf.getType();
         String[] split = employeePortraitsInf.getContent().split(",");
         Long removeNum = 0L;
@@ -60,4 +69,41 @@ public class EmployeePortraitsService {
         }
         return removeNum;
     }
+
+    public EmployeeRating selectUnApprovalEmployeeRating(Integer userId){
+        HashMap<String,Object> queryMap = new HashMap<>();
+        queryMap.put("user_id",userId);
+        queryMap.put("flag", false);
+        List<EmployeeRating> employeeRatings = employeeRatingMapper.selectByMap(queryMap);
+        if (employeeRatings.isEmpty()){
+            return null;
+        }
+        return employeeRatings.get(0);
+    }
+
+    public Integer updateEmployeeRating(EmployeeRating employeeRating){
+        employeeRating.setUpdateTime(new Date());
+        employeeRating.setFlag(true);
+        int updateNum = employeeRatingMapper.updateById(employeeRating);
+        return updateNum;
+    }
+
+    public Integer InsertEmployeeRating(EmployeeRating employeeRating){
+        employeeRating.setUpdateTime(new Date());
+        employeeRating.setFlag(false);
+        int insertNum = employeeRatingMapper.insert(employeeRating);
+        return insertNum;
+    }
+
+    public EmployeeRating getApprovalEmployeeRating(Integer userId){
+        HashMap<String,Object> queryMap = new HashMap<>();
+        queryMap.put("user_id",userId);
+        queryMap.put("flag", true);
+        List<EmployeeRating> employeeRatings = employeeRatingMapper.selectByMap(queryMap);
+        if (employeeRatings.isEmpty()){
+            return null;
+        }
+        return employeeRatings.get(employeeRatings.size()-1);
+    }
+
 }
