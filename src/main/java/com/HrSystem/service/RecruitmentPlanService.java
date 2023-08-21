@@ -15,6 +15,18 @@ public class RecruitmentPlanService {
     private RecruitmentPlanMapper recruitmentPlanMapper;
     
     public int insertPlan(RecruitmentPlan recruitmentPlan){
+        if (recruitmentPlan.getPost()==""){
+            return 0;
+        }
+        if (recruitmentPlan.getApproverId()==null){
+            return 0;
+        }
+        if (recruitmentPlan.getWages()==""){
+            return 0;
+        }
+        if (recruitmentPlan.getRequirements()==""){
+            return 0;
+        }
         recruitmentPlan.setStatus(0);
         return recruitmentPlanMapper.insert(recruitmentPlan);
     }

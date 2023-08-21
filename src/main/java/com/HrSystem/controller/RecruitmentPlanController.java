@@ -34,7 +34,7 @@ public class RecruitmentPlanController {
     public Result insertRecruitmentPlan(@RequestBody RecruitmentPlan recruitmentPlan){
         int i = recruitmentPlanService.insertPlan(recruitmentPlan);
         if(i==0){
-            return Result.error("发布招聘计划失败");
+            return Result.error("发布招聘计划失败,请完善岗位，要求，审批人，薪资等信息后重试");
         }
         return Result.ok("招聘计划发布成功");
     }

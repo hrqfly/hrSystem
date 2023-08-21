@@ -14,6 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author hrq
+ * #Description ${NAME}
+ * #Date:   2023/3/14
+ */
+
 @RestController
 @CrossOrigin
 public class UserController {
@@ -41,7 +47,7 @@ public class UserController {
         HashMap<String,String> map = new HashMap<>();
         User userById = userService.findUserById(user.getId());
         if (userById==null){
-            return Result.error("nullUser");
+            return Result.error("账号为空");
         }
         String password1 = userById.getPassword();
         if (password1.equals(user.getPassword())){
@@ -59,7 +65,7 @@ public class UserController {
             response.addCookie(cookie);
             return Result.ok(map);
         }
-        return Result.error("password Wrong");
+        return Result.error("密码错误");
     }
 
     @RequestMapping("/logout")
@@ -75,13 +81,16 @@ public class UserController {
     public Result searchUserByName(String name){
         List<User> users = userService.findUserByName(name);
         if (users.isEmpty()){
-            return Result.error("No user called "+name);
+            return Result.error("没有员工名为： "+name);
         }
         return Result.ok(users);
     }
 
     @RequestMapping("/insertuser")
     public Result insertUser(@RequestBody User user){
+        if(user.getName()==""||user.getPassword()==""){
+            return Result.error("姓名和密码不能为空！");
+        }
         userService.insertUser(user);
         List<User> users = userService.findUserByName(user.getName());
         Integer id = 0;

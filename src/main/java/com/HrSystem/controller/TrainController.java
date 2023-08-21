@@ -14,7 +14,7 @@ import java.util.Set;
 
 /**
  * @author hrq
- * @date 32023/3/11
+ * @date 2023/3/11
  */
 
 @RestController
@@ -23,6 +23,7 @@ public class TrainController {
 
     @Autowired
     private TrainService trainService;
+
 
     @RequestMapping("/addtrain")
     public Result addTrainInf(@RequestBody Train train){

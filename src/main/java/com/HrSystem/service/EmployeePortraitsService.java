@@ -103,7 +103,24 @@ public class EmployeePortraitsService {
         if (employeeRatings.isEmpty()){
             return null;
         }
-        return employeeRatings.get(employeeRatings.size()-1);
+        EmployeeRating latest = employeeRatings.get(0);
+        for (EmployeeRating e:employeeRatings){
+            if (e.getUpdateTime().after(latest.getUpdateTime())){
+                latest = e;
+            }
+        }
+        return latest;
+    }
+
+    public List<EmployeeRating> selectUnApprovalEmployeeRatingbyApr(Integer aprId){
+        HashMap<String,Object> queryMap = new HashMap<>();
+        queryMap.put("approver_id",aprId);
+        queryMap.put("flag", false);
+        List<EmployeeRating> employeeRatings = employeeRatingMapper.selectByMap(queryMap);
+        if (employeeRatings.isEmpty()){
+            return null;
+        }
+        return employeeRatings;
     }
 
 }

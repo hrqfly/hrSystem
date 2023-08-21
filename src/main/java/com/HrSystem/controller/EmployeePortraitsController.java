@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -84,7 +85,7 @@ public class EmployeePortraitsController {
         return Result.error("评估数据审核更新失败，请重试");
     }
 
-    @RequestMapping("/searchUnApprovalEmployeeRating")
+    @GetMapping("/searchUnApprovalEmployeeRating")
     public Result searchUnApprovalEmployeeRating(Integer userId){
         EmployeeRating employeeRating = employeePortraitsService.selectUnApprovalEmployeeRating(userId);
         if (employeeRating==null){
@@ -92,6 +93,7 @@ public class EmployeePortraitsController {
         }
         return Result.ok(employeeRating);
     }
+
     @GetMapping("/getApprovalEmployeeRating")
     public Result getApprovalEmployeeRating(Integer userId){
         EmployeeRating employeeRating = employeePortraitsService.getApprovalEmployeeRating(userId);
@@ -100,4 +102,14 @@ public class EmployeePortraitsController {
         }
         return Result.ok(employeeRating);
     }
+
+    @GetMapping("/searchUnApprovalEmployeeRatingByAprId")
+    public Result searchUnApprovalEmployeeRatingByAprId(Integer aprId){
+        List<EmployeeRating> employeeRatings = employeePortraitsService.selectUnApprovalEmployeeRatingbyApr(aprId);
+        if (employeeRatings == null){
+            return Result.ok("没有待你审批的员工评估数据");
+        }
+        return Result.ok(employeeRatings);
+    }
+
 }

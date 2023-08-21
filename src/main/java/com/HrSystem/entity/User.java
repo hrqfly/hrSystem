@@ -17,10 +17,7 @@ public class User {
     private String post;
     private String phoneNum;
     private String level;
-    private String headerUrl;
     private String email;
-    private String salt;
     private Integer type;
     private Integer leaderId;
-    private Integer underlingId;
 }

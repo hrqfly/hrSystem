@@ -32,6 +32,8 @@ public class SalaryController {
         return Result.ok(salaryByUserId);
     }
 
+
+
     @GetMapping("/generateSalary")
     public Result generateSalaryByAttendance(Integer userId,Float rate){
         int generateNum = salaryService.generateSalaryByAttendance(userId, rate);
