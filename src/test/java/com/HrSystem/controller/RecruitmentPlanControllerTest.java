@@ -2,6 +2,7 @@ package com.HrSystem.controller;
 
 import com.HrSystem.common.pojo.Result;
 import com.HrSystem.entity.RecruitmentPlan;
+import com.HrSystem.entity.User;
 import com.HrSystem.service.RecruitmentPlanService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -81,5 +82,19 @@ class RecruitmentPlanControllerTest {
         doReturn(2).when(recruitmentPlanService).approvePlan(new RecruitmentPlan());
         Result result = recruitmentPlanController.approvalPlan(new RecruitmentPlan());
         Assert.assertEquals(400, result.getStatus().intValue());
+    }
+
+    @Test
+    public void setUserAge(){
+        User user = new User();
+        setUserAge(user);
+        System.out.println(user);
+    }
+
+    private void setUserAge(User user){
+        user.setAge(12);
+        user.setName("giao");
+        user.setId(1);
+        user.setPhoneNum("13237857861");
     }
 }
