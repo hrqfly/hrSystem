@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -48,7 +49,8 @@ class RecruitmentPlanControllerTest {
 
     @Test
     void insertRecruitmentPlan() {
-
+        HashMap<Integer,Integer> map = new HashMap<>();
+        map.put(1,1);
 
 
     }
@@ -88,7 +90,8 @@ class RecruitmentPlanControllerTest {
     public void setUserAge(){
         User user = new User();
         setUserAge(user);
-        System.out.println(user);
+        Assert.assertEquals("giao",user.getName());
+        Assert.assertEquals("13237857861",user.getPhoneNum());
     }
 
     private void setUserAge(User user){
